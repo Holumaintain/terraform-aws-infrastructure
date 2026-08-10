@@ -32,6 +32,10 @@ jobs:
           role-to-assume: arn:aws:iam::148598146690:role/GitHubActions-Terraform-Role
           aws-region: eu-west-1
 
+      - name: Verify AWS identity
+        if: github.event_name == 'push'
+        run: aws sts get-caller-identity
+
       - name: Terraform Init
         if: github.event_name == 'push'
         run: terraform init
