@@ -1,4 +1,4 @@
-name: AWS OIDC Claims
+name: AWS OIDC Test
 
 on:
   push:
@@ -10,33 +10,18 @@ permissions:
   contents: read
 
 jobs:
-  inspect-oidc:
+  test-aws-oidc:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Get OIDC token
-        shell: bash
-        run: |
-          TOKEN=$(curl -sSf \
-            -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
-            "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=sts.amazonaws.com" \
-            | python3 -c 'import sys,json; print(json.load(sys.stdin)["value"])')
+      - name: Checkout
+        uses: actions/checkout@v4
 
-          PAYLOAD=$(echo "$TOKEN" | cut -d '.' -f2 | tr '_-' '/+' | base64 -d 2>/dev/null)
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::148598146690:role/GitHubActions-Terraform-Role
+          aws-region: eu-west-1
 
-          echo "$PAYLOAD" | python3 -c '
-          import sys, json
-          data = json.load(sys.stdin)
-          print("======================================")
-          print("OIDC CLAIMS")
-          print("======================================")
-          print("iss:", data.get("iss"))
-          print("aud:", data.get("aud"))
-          print("sub:", data.get("sub"))
-          print("repository:", data.get("repository"))
-          print("repository_id:", data.get("repository_id"))
-          print("repository_owner:", data.get("repository_owner"))
-          print("repository_owner_id:", data.get("repository_owner_id"))
-          print("ref:", data.get("ref"))
-          print("======================================")
-          '
+      - name: Verify AWS identity
+        run: aws sts get-caller-identity
