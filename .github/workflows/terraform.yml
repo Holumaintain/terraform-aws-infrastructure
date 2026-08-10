@@ -25,6 +25,16 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
 
+      - name: Get GitHub OIDC Token
+        if: github.event_name == 'push'
+        id: oidc
+        run: |
+          echo "Repository: $GITHUB_REPOSITORY"
+          echo "Ref: $GITHUB_REF"
+          echo "Event: $GITHUB_EVENT_NAME"
+          echo "Repository ID: ${{ github.repository_id }}"
+          echo "Repository Owner ID: ${{ github.repository_owner_id }}"
+
       - name: Configure AWS credentials
         if: github.event_name == 'push'
         uses: aws-actions/configure-aws-credentials@v4
