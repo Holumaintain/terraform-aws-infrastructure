@@ -1,4 +1,4 @@
-name: Terraform CI
+name: AWS OIDC Test
 
 on:
   push:
@@ -10,27 +10,12 @@ permissions:
   contents: read
 
 jobs:
-  terraform:
-    name: Terraform Checks
+  test-aws-oidc:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Show GitHub OIDC context
-        run: |
-          echo "======================================"
-          echo "GitHub OIDC DEBUG"
-          echo "======================================"
-          echo "Repository: $GITHUB_REPOSITORY"
-          echo "Ref: $GITHUB_REF"
-          echo "Event: $GITHUB_EVENT_NAME"
-          echo "Repository ID: ${{ github.repository_id }}"
-          echo "Repository Owner ID: ${{ github.repository_owner_id }}"
-          echo "Repository Owner: ${{ github.repository_owner }}"
-          echo "Workflow: $GITHUB_WORKFLOW"
-          echo "======================================"
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -40,18 +25,3 @@ jobs:
 
       - name: Verify AWS identity
         run: aws sts get-caller-identity
-
-      - name: Terraform Init
-        if: github.event_name == 'push'
-        run: terraform init
-
-      - name: Terraform Format Check
-        run: terraform fmt -check -recursive
-
-      - name: Terraform Validate
-        if: github.event_name == 'push'
-        run: terraform validate
-
-      - name: Terraform Plan
-        if: github.event_name == 'push'
-        run: terraform plan
