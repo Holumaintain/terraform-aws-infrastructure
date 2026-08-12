@@ -39,7 +39,8 @@ resource "aws_autoscaling_group" "web" {
   desired_capacity = 1
 
   vpc_zone_identifier = [
-    aws_subnet.public.id
+    aws_subnet.public.id,
+    aws_subnet.public_b.id
   ]
 
   launch_template {

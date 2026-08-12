@@ -40,32 +40,50 @@ output "rds_security_group_id" {
   value       = aws_security_group.rds.id
 }
 
-############################################
-# EC2
-############################################
-
-output "instance_id" {
-  description = "EC2 instance ID"
-  value       = aws_instance.web.id
-}
-
-output "public_ip" {
-  description = "EC2 public IP"
-  value       = aws_instance.web.public_ip
-}
-
-output "public_dns" {
-  description = "EC2 public DNS"
-  value       = aws_instance.web.public_dns
+output "alb_security_group_id" {
+  description = "ALB security group ID"
+  value       = aws_security_group.alb.id
 }
 
 ############################################
-# Elastic IP
+# Application Load Balancer
 ############################################
 
-output "elastic_ip" {
-  description = "Elastic IP address"
-  value       = aws_eip.web.public_ip
+output "alb_dns_name" {
+  description = "Application Load Balancer DNS name"
+  value       = aws_lb.web.dns_name
+}
+
+output "alb_arn" {
+  description = "Application Load Balancer ARN"
+  value       = aws_lb.web.arn
+}
+
+############################################
+# Auto Scaling Group
+############################################
+
+output "autoscaling_group_name" {
+  description = "Auto Scaling Group name"
+  value       = aws_autoscaling_group.web.name
+}
+
+############################################
+# Launch Template
+############################################
+
+output "launch_template_id" {
+  description = "Launch Template ID"
+  value       = aws_launch_template.web.id
+}
+
+############################################
+# Target Group
+############################################
+
+output "target_group_arn" {
+  description = "ALB target group ARN"
+  value       = aws_lb_target_group.web.arn
 }
 
 ############################################

@@ -28,6 +28,21 @@ resource "aws_subnet" "public" {
 }
 
 ############################################
+# Second Public Subnet
+############################################
+
+resource "aws_subnet" "public_b" {
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = "10.0.4.0/24"
+  availability_zone       = "eu-west-1b"
+  map_public_ip_on_launch = true
+
+  tags = {
+    Name = "Public-Subnet-B"
+  }
+}
+
+############################################
 # Private Subnet
 ############################################
 
@@ -43,12 +58,13 @@ resource "aws_subnet" "private" {
 
 ############################################
 # Second Private Subnet
+#
 # Required for RDS Multi-AZ subnet group
 ############################################
 
 resource "aws_subnet" "private_a" {
   vpc_id            = aws_vpc.main.id
-  cidr_block        = "10.0.3.0/24"
+  cidr_block        = var.private_subnet_a_cidr
   availability_zone = "eu-west-1a"
 
   tags = {
@@ -91,5 +107,14 @@ resource "aws_route_table" "public" {
 
 resource "aws_route_table_association" "public" {
   subnet_id      = aws_subnet.public.id
+  route_table_id = aws_route_table.public.id
+}
+
+############################################
+# Second Public Route Table Association
+############################################
+
+resource "aws_route_table_association" "public_b" {
+  subnet_id      = aws_subnet.public_b.id
   route_table_id = aws_route_table.public.id
 }

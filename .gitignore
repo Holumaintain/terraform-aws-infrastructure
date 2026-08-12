@@ -2,27 +2,17 @@
 .terraform/
 *.tfstate
 *.tfstate.*
-*.tfplan
-tfplan
 crash.log
 crash.*.log
 
-# Terraform variable files
+# Sensitive variable files
 *.tfvars
 *.tfvars.json
 
-# Sensitive files
+# Keys
 *.pem
 *.key
+
+# Environment files
 .env
-
-# Terraform lock file
-# Keep this file committed for reproducible provider versions
-# .terraform.lock.hcl
-
-# OS files
-.DS_Store
-Thumbs.db
-
-# VS Code
-.vscode/
+.env.*

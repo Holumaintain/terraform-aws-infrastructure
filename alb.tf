@@ -51,7 +51,7 @@ resource "aws_lb" "web" {
 
   subnets = [
     aws_subnet.public.id,
-    aws_subnet.private.id
+    aws_subnet.public_b.id
   ]
 
   tags = {
@@ -85,15 +85,6 @@ resource "aws_lb_target_group" "web" {
   }
 }
 
-############################################
-# Register EC2 Instance with Target Group
-############################################
-
-resource "aws_lb_target_group_attachment" "web" {
-  target_group_arn = aws_lb_target_group.web.arn
-  target_id        = aws_instance.web.id
-  port             = 80
-}
 
 ############################################
 # ALB Listener
