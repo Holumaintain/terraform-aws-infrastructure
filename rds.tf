@@ -23,7 +23,7 @@ resource "aws_db_instance" "mysql" {
   identifier = "terraform-mysql"
 
   engine         = "mysql"
-  engine_version = "8.0"
+  engine_version = "8.0.46"
 
   instance_class    = "db.t3.micro"
   allocated_storage = 20
